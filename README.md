@@ -1,13 +1,19 @@
 # Airoport
 project for university
 
-To launch a project, you need:
-1) Move to /frontend/ folder
-2) Write `npm run start`
+To launch a server, you need:
+1) Move to /backend/bd folder
+2) Download `airport.sql`
+3) import this file in your BD
+4) In the file `server` change fields login, password (if you need)
 3) Move to /backend/ folder
 4) Write `npm run start`
 
-!But this project has local BD
+To launch a project, you need:
+1) Move to /frontend/ folder
+2) Write `npm run start`
+
+
 
 What was doing in this project?
 1) Authorization without JWT token
