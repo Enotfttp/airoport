@@ -38,7 +38,7 @@ const Registr: React.FC = () => {
   const handleFIO = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const target = event.target as HTMLInputElement;
-      setFIO(target.value);
+      setFIO(target.value || "");
     },
     []
   );
@@ -46,7 +46,7 @@ const Registr: React.FC = () => {
   const handlePhoneNumber = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const target = event.target as HTMLInputElement;
-      setPhoneNumber(Number(target.value));
+      setPhoneNumber(Number(target.value || ""));
     },
     []
   );
@@ -54,7 +54,7 @@ const Registr: React.FC = () => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       event.preventDefault();
       const target = event.target as HTMLInputElement;
-      setPassword(target.value);
+      setPassword(target.value || "");
     },
     []
   );
@@ -62,7 +62,7 @@ const Registr: React.FC = () => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       event.preventDefault();
       const target = event.target as HTMLInputElement;
-      setRepeatPassword(target.value);
+      setRepeatPassword(target.value || "");
     },
     []
   );
@@ -70,7 +70,7 @@ const Registr: React.FC = () => {
   const handleLogin = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const target = event.target as HTMLInputElement;
-      setLogin(target.value);
+      setLogin(target.value || "");
     },
     []
   );
@@ -78,9 +78,9 @@ const Registr: React.FC = () => {
   const handleSingUp = React.useCallback(async () => {
     const data = await signUp(fio, phoneNumber, login, password);
     if (typeof data === "object") {
-        localStorage.setItem("login", login);
-        localStorage.setItem("password", password);
-        navigate("/");
+      localStorage.setItem("login", login);
+      localStorage.setItem("password", password);
+      navigate("/");
       return;
     }
     setError(data);

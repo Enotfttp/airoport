@@ -12,7 +12,9 @@ const DeleteModal: React.FC<IDeleteModal> = ({ onDelete, onClose, isShow }) => {
   if (!isShow) return null;
   return (
     <div className={styles.delete_modal}>
-      <p className={styles['delete_modal-title']}>Do you exact want to delete?</p>
+      <p className={styles["delete_modal-title"]}>
+        Do you exact want to delete?
+      </p>
       <div className={styles.buttton_group}>
         <Button
           variant="contained"

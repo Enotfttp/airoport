@@ -8,19 +8,20 @@ import Header from "../Header/Header";
 import styles from "./Flights.module.sass";
 
 const columns: GridColDef[] = [
-  { field: "departure", headerName: "Departure" },
-  { field: "departureCiry", headerName: "Departure City" },
-  { field: "arrival", headerName: "Arrival" },
-  { field: "arrivalCiry", headerName: "Arrival Ciry" },
-  { field: "nameCompany", headerName: "Name Company" },
-  { field: "status", headerName: "status" },
-  { field: "fio", headerName: "FIO" },
+  { field: "departure", headerName: "Departure", type: "date" },
+  { field: "departureCiry", headerName: "Departure City", type: "string" },
+  { field: "arrival", headerName: "Arrival", type: "data" },
+  { field: "arrivalCiry", headerName: "Arrival Ciry", type: "string" },
+  { field: "nameCompany", headerName: "Name Company", type: "select" },
+  { field: "status", headerName: "status", type: "select" },
+  { field: "fio", headerName: "FIO", type: "string" },
 ];
 
 const Flights: React.FC = () => {
   const [data, setData] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState<string | undefined>(undefined);
+  const [editData, setEditData] = React.useState<any>(null);
 
   const fetchData = React.useCallback(async () => {
     const dataTable = await getFlights();
@@ -41,11 +42,17 @@ const Flights: React.FC = () => {
     setId(id);
   }, []);
 
+  const handleSetCurrentData = React.useCallback((currentData: any) => {
+    setEditData(currentData);
+  }, []);
+
+  const handleEdit = React.useCallback(() => {}, []);
+
   const handleDelete = React.useCallback(async () => {
     if (id) {
-        const data = await deleteFlight(id);
-        await fetchData();
-        if (data) setOpen(false);
+      const data = await deleteFlight(id);
+      await fetchData();
+      if (data) setOpen(false);
     }
   }, [fetchData, id]);
 
@@ -60,7 +67,9 @@ const Flights: React.FC = () => {
       <TableData
         columns={columns}
         openModal={open}
+        data={editData}
         handleClose={handleOpen}
+        handleEdit={handleEdit}
         handleDelete={handleDelete}>
         {data.length &&
           data.map((row: any) => (
@@ -69,7 +78,10 @@ const Flights: React.FC = () => {
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 className={styles.table_cell}
-                onClick={() => handleOpen(row.id)}>
+                onClick={() => {
+                  handleOpen(row.id);
+                  handleSetCurrentData(row);
+                }}>
                 <TableCell align="left">{row.departure}</TableCell>
                 <TableCell align="left">{row.departureCiry}</TableCell>
                 <TableCell align="left">{row.arrival}</TableCell>

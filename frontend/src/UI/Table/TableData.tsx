@@ -8,6 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { GridColDef } from "@mui/x-data-grid";
 import * as React from "react";
+import { roles } from "../../utills/roleUtills";
 import MiniModal from "../Modals/MiniModal/MiniModal";
 import styles from "./TableData.module.sass";
 
@@ -17,28 +18,34 @@ interface ITable {
   handleAdd?: () => void;
   handleClose: () => void;
   handleDelete: () => void;
+  handleEdit: (data: any) => void;
   openModal: boolean;
+  data: any;
 }
 const TableData: React.FC<ITable> = ({
   columns,
   children,
   handleAdd,
   handleClose,
+  handleEdit,
   handleDelete,
   openModal,
+  data,
 }) => {
   return (
     <div>
-      <div className={styles.add_btn}>
-        <Button
-          onClick={handleAdd}
-          variant="contained"
-          color="success"
-          size="large"
-          sx={{ width: "25ch" }}>
-          Add
-        </Button>
-      </div>
+      {roles.dispatcher !== localStorage.getItem("role") && (
+        <div className={styles.add_btn}>
+          <Button
+            onClick={handleAdd}
+            variant="contained"
+            color="success"
+            size="large"
+            sx={{ width: "25ch" }}>
+            Add
+          </Button>
+        </div>
+      )}
       <TableContainer component={Paper} className={styles.table}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -53,12 +60,16 @@ const TableData: React.FC<ITable> = ({
           <TableBody>{children}</TableBody>
         </Table>
       </TableContainer>
-      <MiniModal
-        open={openModal}
-        handleClose={handleClose}
-        fields={columns}
-        handleDelete={handleDelete}
-      />
+      {roles.dispatcher !== localStorage.getItem("role") && (
+        <MiniModal
+          open={openModal}
+          handleClose={handleClose}
+          handleDelete={handleDelete}
+          handleEdit={handleEdit}
+          data={data}
+          fields={columns}
+        />
+      )}
     </div>
   );
 };

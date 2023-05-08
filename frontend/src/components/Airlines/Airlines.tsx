@@ -1,4 +1,3 @@
-import { TableCell, TableRow } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import React from "react";
 import TableData from "../../UI/Table/TableData";
@@ -9,17 +8,19 @@ import {
 import { dateConverter } from "../../utills/dateUtills";
 import Header from "../Header/Header";
 import styles from "./Airlines.module.sass";
+import { TableCell, TableRow } from "@mui/material";
 
 const columns: GridColDef[] = [
-  { field: "Name Complany", headerName: "Name Company" },
-  { field: "Create Years", headerName: "Create Years" },
-  { field: "Count Planes", headerName: "Count Planes" },
+  { field: "nameCompany", headerName: "Name Company", type: "string" },
+  { field: "createYears", headerName: "Create Years", type: "date" },
+  { field: "countPlanes", headerName: "Count Planes", type: "number" },
 ];
 
 const Airlines: React.FC = () => {
   const [data, setData] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState<string | undefined>(undefined);
+  const [editData, setEditData] = React.useState<any>(null);
 
   const fetchData = React.useCallback(async () => {
     const dataTable = await getAirlines();
@@ -39,6 +40,12 @@ const Airlines: React.FC = () => {
     setId(id);
   }, []);
 
+  const handleSetCurrentData = React.useCallback((currentData: any) => {
+    setEditData(currentData);
+  }, []);
+
+  const handleEdit = React.useCallback((data: any) => {}, []);
+
   const handleDelete = React.useCallback(async () => {
     if (id) {
       const data = await deleteAirline(id);
@@ -50,7 +57,7 @@ const Airlines: React.FC = () => {
   React.useEffect(() => {
     fetchData();
   }, [fetchData]);
-    
+
   return (
     <>
       <Header />
@@ -58,6 +65,8 @@ const Airlines: React.FC = () => {
       <TableData
         columns={columns}
         openModal={open}
+        data={editData}
+        handleEdit={handleEdit}
         handleClose={handleOpen}
         handleDelete={handleDelete}>
         {data.length &&
@@ -66,7 +75,10 @@ const Airlines: React.FC = () => {
               key={row.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               className={styles.table_cell}
-              onClick={() => handleOpen(row.id)}>
+              onClick={() => {
+                handleOpen(row.id);
+                handleSetCurrentData(row);
+              }}>
               <TableCell align="left">{row.nameCompany}</TableCell>
               <TableCell align="left">{row.createYears}</TableCell>
               <TableCell align="left">{row.countPlanes}</TableCell>

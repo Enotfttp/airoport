@@ -35,7 +35,7 @@ const Login: React.FC = () => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       event.preventDefault();
       const target = event.target as HTMLInputElement;
-      setPassword(target.value);
+      setPassword(target.value || "");
     },
     []
   );
@@ -43,7 +43,7 @@ const Login: React.FC = () => {
   const handleLogin = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const target = event.target as HTMLInputElement;
-      setLogin(target.value);
+      setLogin(target.value || "");
     },
     []
   );
@@ -51,12 +51,12 @@ const Login: React.FC = () => {
   const handleSingIn = React.useCallback(async () => {
     const data = await signIn(login, password);
     if (typeof data === "object") {
-        localStorage.setItem("login", login);
-        localStorage.setItem("password", password);
-        localStorage.setItem("role", data.role);
-        localStorage.setItem("id", data.id);
-        localStorage.setItem("fio", data.fio);
-        navigate("/flights");
+      localStorage.setItem("login", login);
+      localStorage.setItem("password", password);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("id", data.id);
+      localStorage.setItem("fio", data.fio);
+      navigate("/flights");
       return;
     }
     setError(data);
