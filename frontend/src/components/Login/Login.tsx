@@ -54,6 +54,8 @@ const Login: React.FC = () => {
         localStorage.setItem("login", login);
         localStorage.setItem("password", password);
         localStorage.setItem("role", data.role);
+        localStorage.setItem("id", data.id);
+        localStorage.setItem("fio", data.fio);
         navigate("/flights");
       return;
     }

@@ -16,6 +16,7 @@ interface ITable {
   children: any;
   handleAdd?: () => void;
   handleClose: () => void;
+  handleDelete: () => void;
   openModal: boolean;
 }
 const TableData: React.FC<ITable> = ({
@@ -23,6 +24,7 @@ const TableData: React.FC<ITable> = ({
   children,
   handleAdd,
   handleClose,
+  handleDelete,
   openModal,
 }) => {
   return (
@@ -51,7 +53,12 @@ const TableData: React.FC<ITable> = ({
           <TableBody>{children}</TableBody>
         </Table>
       </TableContainer>
-      <MiniModal open={openModal} handleClose={handleClose} />
+      <MiniModal
+        open={openModal}
+        handleClose={handleClose}
+        fields={columns}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };

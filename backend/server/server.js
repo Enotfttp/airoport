@@ -39,14 +39,18 @@ server.post('/api/signIn/:login', (req, res) => {
     pool.query(`Select * from employes INNER JOIN roles ON roles.idДолжности = employes.IdДолжности where Логин = '${login}' AND Пароль = '${password}'`, (err, data) => { 
         if (err) return console.error(err);
         let index = 0;
+        let role ;
+        let id;
             /* 
                 Костыль
             */
                 for (let value of Object.values(...data)) {
                     index++;
+                    if (index === 1) id = value;
+                    if (index === 2) fio = value;
                     if (index === 8) role = value;
                 }
-        return res.json({ ...data, role })
+        return res.json({ role, id, fio})
     })
 })
 
@@ -81,6 +85,15 @@ server.get("/api/employees", function(req, res){
     });
 });
 
+// Удаление пользователя
+server.delete("/api/employee/delete/:id", function (req, res) {
+    if(!req.body) return res.sendStatus(400);
+    const { id } = req.body;
+    pool.query(`Delete From employes where idСотрудника = '${id}'`, function(err, data) {
+        if (err) return console.error(err);
+        res.json('delete user');
+    });
+});
 
 // Получение всех полётов
 server.get("/api/flights", function(req, res){
@@ -114,8 +127,17 @@ server.get("/api/flights", function(req, res){
     });
 });
 
-// Получение информации обо всех авиакомпаниях
+// Удаление полёта
+server.delete("/api/flight/delete/:id", function (req, res) {
+    if(!req.body) return res.sendStatus(400);
+    const { id } = req.body;
+    pool.query(`Delete From flights where idПолета = '${id}'`, function(err, data) {
+        if (err) return console.error(err);
+        res.json('delete flight');
+    });
+});
 
+// Получение информации обо всех авиакомпаниях
 server.get("/api/airlines", function(req, res){
     pool.query("SELECT * FROM airlines", function(err, data) {
         if (err) return console.error(err);
@@ -139,6 +161,15 @@ server.get("/api/airlines", function(req, res){
     });
 });
 
+// Удаление авиакомпании
+server.delete("/api/airline/delete/:id", function (req, res) {
+    if(!req.body) return res.sendStatus(400);
+    const { id } = req.body;
+    pool.query(`Delete From airlines where idАвиакомпании = '${id}'`, function(err, data) {
+        if (err) return console.error(err);
+        res.json('delete airline');
+    });
+});
 
 // Создание полёта 
 // INSERT INTO `flights` (`idПолета`, `Время вылета`, `Время прилета`, `Город вылета`, `Город приелта`, `idВхода`, `idСотрудника`, `idСтатуса`, `idАвиакомпании`, `idСамолета`) VALUES (NULL, '2023-05-01', '2023-05-01', 'Нижний Новгород', 'Москва', '1', '3', '1', '1', '1');

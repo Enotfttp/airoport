@@ -2,7 +2,7 @@ import { TableCell, TableRow } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import React from "react";
 import TableData from "../../UI/Table/TableData";
-import { getFlights } from "../../controllers/FlightController";
+import { deleteFlight, getFlights } from "../../controllers/FlightController";
 import { dateConverter } from "../../utills/dateUtills";
 import Header from "../Header/Header";
 import styles from "./Flights.module.sass";
@@ -20,33 +20,48 @@ const columns: GridColDef[] = [
 const Flights: React.FC = () => {
   const [data, setData] = React.useState([]);
   const [open, setOpen] = React.useState(false);
+  const [id, setId] = React.useState<string | undefined>(undefined);
+
+  const fetchData = React.useCallback(async () => {
+    const dataTable = await getFlights();
+    if (dataTable.length) {
+      const res = dataTable.map((el: any) => ({
+        ...el,
+        departure: dateConverter(el.departure),
+        arrival: dateConverter(el.arrival),
+      }));
+      setData(res);
+    } else {
+      setData([]);
+    }
+  }, []);
+
+  const handleOpen = React.useCallback((id?: string) => {
+    setOpen((openModal) => !openModal);
+    setId(id);
+  }, []);
+
+  const handleDelete = React.useCallback(async () => {
+    if (id) {
+        const data = await deleteFlight(id);
+        await fetchData();
+        if (data) setOpen(false);
+    }
+  }, [fetchData, id]);
 
   React.useEffect(() => {
-    const fetchData = async () => {
-      const dataTable = await getFlights();
-      if (dataTable.length) {
-        const res = dataTable.map((el: any) => ({
-          ...el,
-          departure: dateConverter(el.departure),
-          arrival: dateConverter(el.arrival),
-        }));
-        setData(res);
-      } else {
-        setData([]);
-      }
-    };
     fetchData();
-  }, []);
-
-  const handleOpen = React.useCallback(() => {
-    setOpen((openModal) => !openModal);
-  }, []);
+  }, [fetchData]);
 
   return (
     <>
       <Header />
       <h2 className={styles.flights_title}>Flights</h2>
-      <TableData columns={columns} openModal={open} handleClose={handleOpen}>
+      <TableData
+        columns={columns}
+        openModal={open}
+        handleClose={handleOpen}
+        handleDelete={handleDelete}>
         {data.length &&
           data.map((row: any) => (
             <>
@@ -54,7 +69,7 @@ const Flights: React.FC = () => {
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 className={styles.table_cell}
-                onClick={handleOpen}>
+                onClick={() => handleOpen(row.id)}>
                 <TableCell align="left">{row.departure}</TableCell>
                 <TableCell align="left">{row.departureCiry}</TableCell>
                 <TableCell align="left">{row.arrival}</TableCell>
