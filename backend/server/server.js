@@ -38,6 +38,7 @@ server.post('/api/signIn/:login', (req, res) => {
 
     pool.query(`Select * from employes INNER JOIN roles ON roles.idДолжности = employes.IdДолжности where Логин = '${login}' AND Пароль = '${password}'`, (err, data) => { 
         if (err) return console.error(err);
+        if(!data.length) return res.sendStatus(400);
         let index = 0;
         let role ;
         let id;
@@ -69,6 +70,7 @@ server.post('/api/signUp/:login', (req, res) => {
 server.get("/api/employees", function(req, res){
     pool.query("SELECT ФИО, Телефон, `Название должности`, idСотрудника FROM employes INNER JOIN roles ON employes.IdДолжности=roles.idДолжности", function(err, data) {
         if (err) return console.error(err);
+        if(!data.length) return res.sendStatus(400);
         const newData = data.map((elem) => {
             let index = 0;
             let role;
@@ -95,10 +97,21 @@ server.delete("/api/employee/delete/:id", function (req, res) {
     });
 });
 
+// Редактирование пользователя
+server.put("/api/employee/edit/:id", function (req, res) {
+    if(!req.body) return res.sendStatus(400);
+    const {id, fio, idRole, phoneNumber } = req.body;
+    pool.query(`UPDATE employes SET ФИО = '${fio}', IdДолжности = ${idRole}, Телефон = '${phoneNumber}' WHERE employes.idСотрудника = ${id}`, function(err, data) {
+        if (err) return console.error(err);
+        res.json('user updated');
+    });
+});
+
 // Получение всех полётов
 server.get("/api/flights", function(req, res){
     pool.query("SELECT idПолета, `Время вылета`, `Время прилета`, `Город вылета`, `Город приелта`, employes.ФИО, airlines.`Название авиакомпании`, statuses.`Название статуса`, aircrafts.`Название самолета` FROM ((((flights INNER JOIN employes ON flights.idСотрудника = employes.idСотрудника) INNER JOIN airlines ON flights.idАвиакомпании = airlines.idАвиакомпании) INNER JOIN statuses ON flights.idСтатуса = statuses.idСтатуса) INNER JOIN aircrafts ON flights.idСамолета = aircrafts.idСамолета)", function(err, data) {
         if (err) return console.error(err);
+        if(!data.length) return res.sendStatus(400);
         const newData = data.map((elem) => {
             let index = 0;
             let departure;
@@ -141,6 +154,7 @@ server.delete("/api/flight/delete/:id", function (req, res) {
 server.get("/api/airlines", function(req, res){
     pool.query("SELECT * FROM airlines", function(err, data) {
         if (err) return console.error(err);
+        if(!data.length) return res.sendStatus(400);
         const newData = data.map((elem) => {
             let index = 0;
             let nameCompany;
