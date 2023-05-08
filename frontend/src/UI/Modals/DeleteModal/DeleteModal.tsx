@@ -34,4 +34,4 @@ const DeleteModal: React.FC<IDeleteModal> = ({ onDelete, onClose, isShow }) => {
   );
 };
 
-export default DeleteModal;
+export default React.memo(DeleteModal);

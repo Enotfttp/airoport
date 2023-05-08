@@ -5,4 +5,4 @@ const EditModal: React.FC = () => {
   return <div className={styles.modal}>Edit</div>;
 };
 
-export default EditModal;
+export default React.memo(EditModal);

@@ -1,8 +1,8 @@
 import Button from "@mui/material/Button";
 import { GridColDef } from "@mui/x-data-grid";
 import React from "react";
-import styles from "./MiniModal.module.sass";
 import DeleteModal from "../DeleteModal/DeleteModal";
+import styles from "./MiniModal.module.sass";
 
 interface IMiniModal {
   open?: boolean;
@@ -53,9 +53,13 @@ const MiniModal: React.FC<IMiniModal> = ({
           <Button onClick={handleClose}>Close</Button>
         </div>
       </div>
-      <DeleteModal isShow={isShowDelete} onDelete={handleDelete} onClose={onDelete} />
+      <DeleteModal
+        isShow={isShowDelete}
+        onDelete={handleDelete}
+        onClose={onDelete}
+      />
     </>
   );
 };
 
-export default MiniModal;
+export default React.memo(MiniModal);
