@@ -8,7 +8,7 @@ import {
   getEmployees,
   getRoles,
 } from "../../controllers/EmployeeController";
-import { uniqArrayForModal } from "../../utills/dataUtil";
+import { checkIsArrayDataFromModal, uniqArrayForModal } from "../../utills/dataUtil";
 import Header from "../Header/Header";
 import styles from "./Employees.module.sass";
 
@@ -59,7 +59,12 @@ const Employees: React.FC = () => {
   );
 
   const handleEdit = React.useCallback((data: any) => {
-    editEmployee(data.id, data.fio, data.roleSelect.id, data.phone);
+    editEmployee(
+      data.id,
+      data.fio,
+      checkIsArrayDataFromModal(data.roleSelect),
+      data.phone
+    );
     setOpen(false);
   }, []);
 

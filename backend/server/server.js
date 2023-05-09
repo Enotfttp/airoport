@@ -130,11 +130,12 @@ server.put("/api/employee/edit/:id", function (req, res) {
 
 // Получение всех полётов
 server.get("/api/flights", function(req, res){
-    pool.query("SELECT idПолета, `Время вылета`, `Время прилета`, `Город вылета`, `Город приелта`, employes.ФИО, airlines.`Название авиакомпании`, statuses.`Название статуса`, aircrafts.`Название самолета` FROM ((((flights INNER JOIN employes ON flights.idСотрудника = employes.idСотрудника) INNER JOIN airlines ON flights.idАвиакомпании = airlines.idАвиакомпании) INNER JOIN statuses ON flights.idСтатуса = statuses.idСтатуса) INNER JOIN aircrafts ON flights.idСамолета = aircrafts.idСамолета)", function(err, data) {
+    pool.query("SELECT idПолета, `Время вылета`, `Время прилета`, `Город вылета`, `Город приелта`, employes.ФИО, airlines.`Название авиакомпании`, statuses.`Название статуса`, aircrafts.`Название самолета`, enters.`Номер входа` FROM (((((flights INNER JOIN employes ON flights.idСотрудника = employes.idСотрудника) INNER JOIN airlines ON flights.idАвиакомпании = airlines.idАвиакомпании) INNER JOIN statuses ON flights.idСтатуса = statuses.idСтатуса) INNER JOIN aircrafts ON flights.idСамолета = aircrafts.idСамолета) INNER JOIN enters on flights.idВхода = enters.idВхода )", function(err, data) {
         if (err) return console.error(err);
         if(!data.length) return res.sendStatus(400);
         const newData = data.map((elem) => {
             let index = 0;
+            let enter;
             let departure;
             let departureCiry;
             let arrival;
@@ -154,8 +155,9 @@ server.get("/api/flights", function(req, res){
                 if (index === 7) nameCompany = value;
                 if (index === 8) status = value;
                 if (index === 9) plane = value;
+                if (index === 10) enter = value;
             }
-            return { id: elem.idПолета, fio: elem.ФИО, departure,departureCiry, arrival, arrivalCiry, nameCompany, status, plane  }
+            return { id: elem.idПолета, fio: elem.ФИО, departure,departureCiry, arrival, arrivalCiry, nameCompany, status, plane, enter  }
         })
         res.json(newData);
     });
@@ -182,6 +184,48 @@ server.get("/api/statuses", function(req, res){
     });
 });
 
+// Получение всех входов
+server.get("/api/enters", function(req, res){
+    pool.query("SELECT * FROM enters", function(err, data) {
+        if (err) return console.error(err);
+        if(!data.length) return res.sendStatus(400);
+        const newData = data.map((elem) => {
+            let index = 0;
+            let enter;
+            /* 
+                Костыль
+            */
+            for (let value of Object.values(elem)) {
+                index++;
+                if (index === 2) enter = value;
+            }
+            return { id: elem.idВхода, enter }
+        })
+        res.json(newData);
+    });
+});
+
+// Получение всех самоолётов
+server.get("/api/aircrafts", function(req, res){
+    pool.query("SELECT * FROM aircrafts", function(err, data) {
+        if (err) return console.error(err);
+        if(!data.length) return res.sendStatus(400);
+        const newData = data.map((elem) => {
+            let index = 0;
+            let aircraft;
+            /* 
+                Костыль
+            */
+            for (let value of Object.values(elem)) {
+                index++;
+                if (index === 2) aircraft = value;
+            }
+            return { id: elem.idСамолета, aircraft }
+        })
+        res.json(newData);
+    });
+});
+
 // Удаление полёта
 server.delete("/api/flight/delete/:id", function (req, res) {
     if(!req.body) return res.sendStatus(400);
@@ -191,6 +235,17 @@ server.delete("/api/flight/delete/:id", function (req, res) {
         res.json('delete flight');
     });
 });
+
+// Редактирование полёта
+server.put("/api/flight/edit/:idFlight", function (req, res) {
+    if (!req.body) return res.sendStatus(400);
+    const { idFlight, departure, arrival, departureCiry, arrivalCiry, idEnter, idPilot, idStatus, idAirline, idPlane } = req.body;
+    pool.query(`UPDATE \`flights\` SET \`Время вылета\` = '${departure}', \`Время прилета\` = '${arrival}', \`Город вылета\` = '${departureCiry}', \`Город приелта\` = '${arrivalCiry}', \`idВхода\` = '${idEnter}', \`idСотрудника\` = '${idPilot}', \`idСтатуса\` = '${idStatus}', \`idАвиакомпании\` = '${idAirline}', \`idСамолета\` = '${idPlane}' WHERE \`flights\`.\`idПолета\` = ${idFlight}`, function(err, data) {
+        if (err) return console.error(err);
+        res.json('flight updated');
+    });
+});
+
 
 // Получение информации обо всех авиакомпаниях
 server.get("/api/airlines", function(req, res){
