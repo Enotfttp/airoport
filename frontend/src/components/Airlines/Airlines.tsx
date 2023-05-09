@@ -1,14 +1,15 @@
+import { TableCell, TableRow } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import React from "react";
 import TableData from "../../UI/Table/TableData";
 import {
   deleteAirline,
+  editAirline,
   getAirlines,
 } from "../../controllers/AirlinesController";
 import { dateConverter } from "../../utills/dateUtills";
 import Header from "../Header/Header";
 import styles from "./Airlines.module.sass";
-import { TableCell, TableRow } from "@mui/material";
 
 const columns: GridColDef[] = [
   { field: "nameCompany", headerName: "Name Company", type: "string" },
@@ -44,7 +45,10 @@ const Airlines: React.FC = () => {
     setEditData(currentData);
   }, []);
 
-  const handleEdit = React.useCallback((data: any) => {}, []);
+  const handleEdit = React.useCallback((data: any) => {
+    editAirline(data.id, data.nameCompany, data.createYears, data.countPlanes);
+    setOpen(false);
+  }, []);
 
   const handleDelete = React.useCallback(async () => {
     if (id) {
@@ -56,7 +60,7 @@ const Airlines: React.FC = () => {
 
   React.useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, open]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { deleteRequest, getRequest } from "../axios/http"
+import { deleteRequest, getRequest, putRequest } from "../axios/http"
 
 export const getAirlines = async () => {
     const data = await getRequest('/api/airlines');
@@ -18,3 +18,11 @@ export const deleteAirline = async (id: string) => {
     }
 };
 
+export const editAirline = async (id: string, nameCompany: string, createYears: number, countPlanes: number) => {
+    const data = await putRequest(`/api/airline/edit/${id}`, {}, { id, nameCompany, createYears, countPlanes });
+    if (data) {
+        return data;
+    } else {
+        return "Не получилось удалить";
+    }
+};

@@ -282,5 +282,15 @@ server.delete("/api/airline/delete/:id", function (req, res) {
     });
 });
 
+// Редактирование пользователя
+server.put("/api/airline/edit/:id", function (req, res) {
+    if(!req.body) return res.sendStatus(400);
+    const { id, nameCompany, createYears, countPlanes } = req.body;
+    pool.query(`UPDATE \`airlines\` SET \`Название авиакомпании\` = '${nameCompany}', \`Год основания\` = '${createYears}', \`Количество самолётов\` = '${countPlanes}' WHERE \`airlines\`.\`idАвиакомпании\` = ${id}`, function(err, data) {
+        if (err) return console.error(err);
+        res.json('airline updated');
+    });
+});
+
 // Создание полёта 
 // INSERT INTO `flights` (`idПолета`, `Время вылета`, `Время прилета`, `Город вылета`, `Город приелта`, `idВхода`, `idСотрудника`, `idСтатуса`, `idАвиакомпании`, `idСамолета`) VALUES (NULL, '2023-05-01', '2023-05-01', 'Нижний Новгород', 'Москва', '1', '3', '1', '1', '1');
