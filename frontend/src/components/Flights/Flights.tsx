@@ -12,13 +12,10 @@ import {
   getFlights,
   getStatuses,
 } from "../../controllers/FlightController";
-import {
-  checkIsArrayDataFromModal,
-  uniqArrayForModal,
-} from "../../utills/dataUtil";
 import { dateConverter } from "../../utills/dateUtills";
 import Header from "../Header/Header";
 import styles from "./Flights.module.sass";
+import { checkIsArrayDataFromModal, uniqArrayForModal } from "../../utills/dataUtil";
 
 const columns: GridColDef[] = [
   { field: "departure", headerName: "Departure", type: "date" },
