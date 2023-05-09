@@ -4,6 +4,7 @@ import React from "react";
 import TableData from "../../UI/Table/TableData";
 import {
   deleteEmployee,
+  editEmployee,
   getEmployees,
   getRoles,
 } from "../../controllers/EmployeeController";
@@ -57,8 +58,9 @@ const Employees: React.FC = () => {
     [dataRoles]
   );
 
-    const handleEdit = React.useCallback((data: any) => {
-        console.log('data = ', data);
+  const handleEdit = React.useCallback((data: any) => {
+    editEmployee(data.id, data.fio, data.roleSelect.id, data.phone);
+    setOpen(false);
   }, []);
 
   const handleDelete = React.useCallback(async () => {
@@ -71,7 +73,7 @@ const Employees: React.FC = () => {
 
   React.useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, open]);
 
   return (
     <>

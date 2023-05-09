@@ -29,13 +29,23 @@ const EditModal: React.FC<IEditModal> = ({
 }) => {
   const [anyData, setAnyData] = React.useState<any>({});
   const setAnyDataFromModal = React.useCallback(
-    (value: string | object, field: string) => {
+    (value: string, field: string) => {
+      if (field.includes("Select")) {
+        const id = data[field].find(
+          (el: { id: number; name: string }) => el.name === value
+        ).id;
+        setAnyData((prev: { [key: string]: string | object }) => ({
+          ...prev,
+          [field]: { id: id, name: value },
+        }));
+        return;
+      }
       setAnyData((prev: { [key: string]: string | object }) => ({
         ...prev,
         [field]: value,
       }));
     },
-    []
+    [data]
   );
 
   const handleSave = React.useCallback(() => {
@@ -43,7 +53,8 @@ const EditModal: React.FC<IEditModal> = ({
       if (!anyData[key]) anyData[key] = value;
     });
     handleEdit(anyData);
-  }, [anyData, data, handleEdit]);
+    onClose();
+  }, [anyData, data, handleEdit, onClose]);
 
   if (!isShow) return null;
   return (
@@ -81,7 +92,7 @@ const EditModal: React.FC<IEditModal> = ({
                 </InputLabel>
                 <OutlinedInput
                   id="outlined-adornment-number"
-                  type="text"
+                  type="number"
                   label={el.headerName}
                   autoComplete="off"
                   value={anyData[el.field] ?? data[el.field]}
@@ -109,18 +120,19 @@ const EditModal: React.FC<IEditModal> = ({
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
-                  value={anyData[el.field] || data[el.field]?.[0]?.name}
+                  value={
+                    anyData[el.field]?.name || data[el.field]?.[0]?.name || ""
+                  }
                   onChange={(event) => {
                     setAnyDataFromModal(event.target.value, el.field);
                   }}
                   label={el.headerName}>
                   {data[el.field]?.map(
-                    (item: { id: number; name: string }, index: number) =>
-                      item.name !== anyData[el.field]?.name && (
-                        <MenuItem value={item.name} key={`${item.id}${index}`}>
-                          {item.name}
-                        </MenuItem>
-                      )
+                    (item: { id: number; name: string }, index: number) => (
+                      <MenuItem value={item.name} key={`${item.id}${index}`}>
+                        {item.name}
+                      </MenuItem>
+                    )
                   )}
                 </Select>
               </FormControl>

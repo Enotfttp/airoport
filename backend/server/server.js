@@ -121,8 +121,8 @@ server.delete("/api/employee/delete/:id", function (req, res) {
 // Редактирование пользователя
 server.put("/api/employee/edit/:id", function (req, res) {
     if(!req.body) return res.sendStatus(400);
-    const {id, fio, idRole, phoneNumber } = req.body;
-    pool.query(`UPDATE employes SET ФИО = '${fio}', IdДолжности = ${idRole}, Телефон = '${phoneNumber}' WHERE employes.idСотрудника = ${id}`, function(err, data) {
+    const { id, fio, idRole, phoneNumber } = req.body;
+    pool.query(`UPDATE \`employes\` SET \`ФИО\` = '${fio}', \`IdДолжности\` = '${idRole}', \`Телефон\` = '${phoneNumber}' WHERE employes.idСотрудника = '${id}'`, function(err, data) {
         if (err) return console.error(err);
         res.json('user updated');
     });

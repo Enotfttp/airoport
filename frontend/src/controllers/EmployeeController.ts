@@ -31,7 +31,7 @@ export const deleteEmployee = async (id: string) => {
 };
 
 export const editEmployee = async (id: string, fio: string, idRole: number, phoneNumber: number) => {
-    const data = await putRequest(`/api/employee/edit/${id}`, {}, { id });
+    const data = await putRequest(`/api/employee/edit/${id}`, {}, { id, fio, idRole, phoneNumber });
     if (data) {
         return data;
     } else {

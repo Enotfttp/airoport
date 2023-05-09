@@ -111,7 +111,7 @@ const Registr: React.FC = () => {
         </InputLabel>
         <OutlinedInput
           id="outlined-adornment-password"
-          type="text"
+          type="number"
           label="Phone number"
           autoComplete="off"
           onChange={handlePhoneNumber}
