@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Май 07 2023 г., 22:35
+-- Время создания: Май 10 2023 г., 01:53
 -- Версия сервера: 10.3.22-MariaDB
 -- Версия PHP: 7.1.33
 
@@ -41,13 +41,10 @@ CREATE TABLE `aircrafts` (
 --
 
 INSERT INTO `aircrafts` (`idСамолета`, `Название самолета`, `Количество мест`, `idСтатуса`, `Скорость`, `idСотрудника`) VALUES
-(1, 'Boeng 100', 200, 1, 700, 1),
-(2, 'Boeng 200', 100, 2, 700, 2),
 (4, 'Boeng 400', 100, 1, 800, 4),
 (5, 'Boeng 500', 100, 2, 1000, 5),
 (6, 'Boeng 600', 100, 3, 900, 6),
-(7, 'Boeng 700', 100, 1, 700, 7),
-(8, 'Boeng 800', 150, 2, 700, 1);
+(7, 'Boeng 700', 100, 1, 700, 7);
 
 -- --------------------------------------------------------
 
@@ -89,7 +86,7 @@ CREATE TABLE `airlines` (
 --
 
 INSERT INTO `airlines` (`idАвиакомпании`, `Название авиакомпании`, `Год основания`, `Количество самолётов`) VALUES
-(1, 'Россия', '1997-10-12', 30),
+(1, 'Россия', '1997-10-20', 30),
 (2, 'Венгрия', '1987-08-08', 40),
 (3, 'Турция', '1957-02-22', 50),
 (4, 'Сербия', '1963-04-02', 60),
@@ -120,19 +117,16 @@ CREATE TABLE `employes` (
 --
 
 INSERT INTO `employes` (`idСотрудника`, `ФИО`, `IdДолжности`, `Телефон`, `Логин`, `Пароль`) VALUES
-(1, 'Лепахин Дмитрий Владимирович', 1, 1234567890, 'test1', 'test1'),
-(2, 'Горчавкин Владислав Андреевич', 3, 1234567890, 'test2', 'test2'),
-(3, 'Бакурсикй Андрей Сергеевич', 3, 1234567890, 'test3', 'test3'),
-(4, 'Юношев Артём Сергеевич', 4, 1234567890, 'test4', 'test4'),
+(3, 'Парашин Вадим Андреевич', 3, 1234567892, 'test3', 'test3'),
+(4, 'Григоров Ярослав Максимович', 4, 1234567892, 'test4', 'test4'),
 (5, 'Баныкин Игорь Валерьевич', 1, 1234567890, 'test5', 'test5'),
 (6, 'Григоров Ярослав Максимович', 2, 1234567890, 'test6', 'test6'),
 (7, 'Черешнев Андрей Владимирович', 3, 1234567890, 'test7', 'test7'),
-(8, 'Трошин Максим Игоревич', 4, 1234567890, 'test8', 'test8'),
+(8, 'Трошин Максим Игоревич', 1, 1234567890, 'test8', 'test8'),
 (9, 'Парашин Вадим Андреевич', 1, 1234567890, 'test9', 'test9'),
 (10, 'Рыбаков Дмитрий Андреевич', 2, 1234567890, 'test10', 'test10'),
-(11, 'test test test', 3, 123456789, 'test123', 'test123'),
-(12, 'test123123', 3, 123213, 'test123123', 'test123123'),
-(13, 'test1231231', 3, 1232131, 'test1231231', 'test1231231');
+(17, '1234567890', 3, 1234567890, '1234567890', '1234567890'),
+(18, 'test test test', 1, 1234567890, 'dfghjkl1', 'dfghjkl1');
 
 -- --------------------------------------------------------
 
@@ -181,7 +175,7 @@ CREATE TABLE `flights` (
 --
 
 INSERT INTO `flights` (`idПолета`, `Время вылета`, `Время прилета`, `Город вылета`, `Город приелта`, `idВхода`, `idСотрудника`, `idСтатуса`, `idАвиакомпании`, `idСамолета`) VALUES
-(7, '2023-05-01', '2023-05-01', 'Нижний Новгород', 'Москва', 1, 3, 1, 1, 1);
+(8, '2023-05-22', '2023-05-21', 'Россия, Москва', 'Россия,  Пермь', 4, 8, 3, 4, 7);
 
 -- --------------------------------------------------------
 
@@ -495,13 +489,13 @@ ALTER TABLE `aircrafts`
 -- AUTO_INCREMENT для таблицы `airlines`
 --
 ALTER TABLE `airlines`
-  MODIFY `idАвиакомпании` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `idАвиакомпании` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123456790;
 
 --
 -- AUTO_INCREMENT для таблицы `employes`
 --
 ALTER TABLE `employes`
-  MODIFY `idСотрудника` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `idСотрудника` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT для таблицы `enters`
@@ -513,7 +507,7 @@ ALTER TABLE `enters`
 -- AUTO_INCREMENT для таблицы `flights`
 --
 ALTER TABLE `flights`
-  MODIFY `idПолета` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idПолета` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT для таблицы `roles`
@@ -535,8 +529,8 @@ ALTER TABLE `statuses`
 -- Ограничения внешнего ключа таблицы `aircrafts`
 --
 ALTER TABLE `aircrafts`
-  ADD CONSTRAINT `aircrafts_ibfk_1` FOREIGN KEY (`idСтатуса`) REFERENCES `statuses` (`idСтатуса`),
-  ADD CONSTRAINT `aircrafts_ibfk_2` FOREIGN KEY (`idСотрудника`) REFERENCES `employes` (`idСотрудника`);
+  ADD CONSTRAINT `aircrafts_ibfk_1` FOREIGN KEY (`idСтатуса`) REFERENCES `statuses` (`idСтатуса`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `aircrafts_ibfk_2` FOREIGN KEY (`idСотрудника`) REFERENCES `employes` (`idСотрудника`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `aircrafts_airline`
@@ -556,16 +550,16 @@ ALTER TABLE `aircrafts_flights`
 -- Ограничения внешнего ключа таблицы `employes`
 --
 ALTER TABLE `employes`
-  ADD CONSTRAINT `employes_ibfk_1` FOREIGN KEY (`IdДолжности`) REFERENCES `roles` (`idДолжности`);
+  ADD CONSTRAINT `employes_ibfk_1` FOREIGN KEY (`IdДолжности`) REFERENCES `roles` (`idДолжности`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `flights`
 --
 ALTER TABLE `flights`
-  ADD CONSTRAINT `flights_ibfk_1` FOREIGN KEY (`idАвиакомпании`) REFERENCES `airlines` (`idАвиакомпании`),
-  ADD CONSTRAINT `flights_ibfk_3` FOREIGN KEY (`idСтатуса`) REFERENCES `statuses` (`idСтатуса`),
-  ADD CONSTRAINT `flights_ibfk_4` FOREIGN KEY (`idВхода`) REFERENCES `enters` (`idВхода`),
-  ADD CONSTRAINT `flights_ibfk_5` FOREIGN KEY (`idСотрудника`) REFERENCES `employes` (`idСотрудника`),
+  ADD CONSTRAINT `flights_ibfk_1` FOREIGN KEY (`idАвиакомпании`) REFERENCES `airlines` (`idАвиакомпании`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `flights_ibfk_3` FOREIGN KEY (`idСтатуса`) REFERENCES `statuses` (`idСтатуса`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `flights_ibfk_4` FOREIGN KEY (`idВхода`) REFERENCES `enters` (`idВхода`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `flights_ibfk_5` FOREIGN KEY (`idСотрудника`) REFERENCES `employes` (`idСотрудника`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `flights_ibfk_6` FOREIGN KEY (`idСамолета`) REFERENCES `aircrafts` (`idСамолета`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
