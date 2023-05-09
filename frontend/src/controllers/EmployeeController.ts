@@ -11,6 +11,16 @@ export const getEmployees = async () => {
     }
 };
 
+export const getRoles = async () => {
+    const data = await getRequest("/api/roles");
+    if (data) {
+        const res = data.map((el: any) => ({ id: el.id, name: el.role }))
+        return res;
+    } else {
+        return "Данных нет";
+    }
+};
+
 export const deleteEmployee = async (id: string) => {
     const data = await deleteRequest(`/api/employee/delete/${id}`, {}, { id });
     if (data) {

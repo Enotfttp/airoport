@@ -50,11 +50,14 @@ const TableData: React.FC<ITable> = ({
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              {columns.map((elem) => (
-                <TableCell className={styles.table_cell}>
-                  {elem.headerName}
-                </TableCell>
-              ))}
+              {columns.map(
+                (elem) =>
+                  !elem.field.includes("Select") && (
+                    <TableCell className={styles.table_cell} key={elem.field}>
+                      {elem.headerName}
+                    </TableCell>
+                  )
+              )}
             </TableRow>
           </TableHead>
           <TableBody>{children}</TableBody>

@@ -9,6 +9,16 @@ export const getFlights = async () => {
     }
 }
 
+export const getStatuses = async () => {
+    const data = await getRequest('/api/statuses');
+    if (data) {
+        const res = data.map((el: any) => ({ id: el.id, name: el.status }))
+        return res
+    } else {
+        return 'Данных нет'
+    }
+}
+
 export const deleteFlight = async (id: string) => {
     const data = await deleteRequest(`/api/flight/delete/${id}`, {}, { id });
     if (data) {

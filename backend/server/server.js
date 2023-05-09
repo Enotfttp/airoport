@@ -87,6 +87,27 @@ server.get("/api/employees", function(req, res){
     });
 });
 
+// Получение всех ролей
+server.get("/api/roles", function(req, res){
+    pool.query("SELECT * FROM roles", function(err, data) {
+        if (err) return console.error(err);
+        if(!data.length) return res.sendStatus(400);
+        const newData = data.map((elem) => {
+            let index = 0;
+            let role;
+            /* 
+                Костыль
+            */
+            for (let value of Object.values(elem)) {
+                index++;
+                if (index === 2) role = value;
+            }
+            return { id: elem.idДолжности, role  }
+        })
+        res.json(newData);
+    });
+});
+
 // Удаление пользователя
 server.delete("/api/employee/delete/:id", function (req, res) {
     if(!req.body) return res.sendStatus(400);
@@ -135,6 +156,27 @@ server.get("/api/flights", function(req, res){
                 if (index === 9) plane = value;
             }
             return { id: elem.idПолета, fio: elem.ФИО, departure,departureCiry, arrival, arrivalCiry, nameCompany, status, plane  }
+        })
+        res.json(newData);
+    });
+});
+
+// Получение всех статусов
+server.get("/api/statuses", function(req, res){
+    pool.query("SELECT * FROM statuses", function(err, data) {
+        if (err) return console.error(err);
+        if(!data.length) return res.sendStatus(400);
+        const newData = data.map((elem) => {
+            let index = 0;
+            let status;
+            /* 
+                Костыль
+            */
+            for (let value of Object.values(elem)) {
+                index++;
+                if (index === 2) status = value;
+            }
+            return { id: elem.idСтатуса, status  }
         })
         res.json(newData);
     });

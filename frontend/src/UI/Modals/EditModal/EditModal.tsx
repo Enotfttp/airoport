@@ -27,8 +27,24 @@ const EditModal: React.FC<IEditModal> = ({
   data,
   fields,
 }) => {
-  console.log("data = ", data);
-  console.log("fields = ", fields);
+  const [anyData, setAnyData] = React.useState<any>({});
+  const setAnyDataFromModal = React.useCallback(
+    (value: string | object, field: string) => {
+      setAnyData((prev: { [key: string]: string | object }) => ({
+        ...prev,
+        [field]: value,
+      }));
+    },
+    []
+  );
+
+  const handleSave = React.useCallback(() => {
+    Object.entries(data).forEach(([key, value]) => {
+      if (!anyData[key]) anyData[key] = value;
+    });
+    handleEdit(anyData);
+  }, [anyData, data, handleEdit]);
+
   if (!isShow) return null;
   return (
     <div className={styles.edit_modal}>
@@ -48,7 +64,10 @@ const EditModal: React.FC<IEditModal> = ({
                   type="text"
                   label={el.headerName}
                   autoComplete="off"
-                  value={data[el.field] || ""}
+                  value={anyData[el.field] ?? data[el.field]}
+                  onChange={(event) =>
+                    setAnyDataFromModal(event.target.value, el.field)
+                  }
                 />
               </FormControl>
             )}
@@ -65,7 +84,10 @@ const EditModal: React.FC<IEditModal> = ({
                   type="text"
                   label={el.headerName}
                   autoComplete="off"
-                  value={data[el.field] || ""}
+                  value={anyData[el.field] ?? data[el.field]}
+                  onChange={(event) =>
+                    setAnyDataFromModal(event.target.value, el.field)
+                  }
                 />
               </FormControl>
             )}
@@ -76,7 +98,7 @@ const EditModal: React.FC<IEditModal> = ({
                 <DatePicker />
               </LocalizationProvider>
             )}
-            {el.type === "select" && (
+            {el.type === "select" && Array.isArray(data[el.field]) && (
               <FormControl
                 variant="standard"
                 sx={{ m: 1, minWidth: 120 }}
@@ -87,15 +109,19 @@ const EditModal: React.FC<IEditModal> = ({
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
-                  value={data[el.field] || ""}
-                  onChange={() => null}
+                  value={anyData[el.field] || data[el.field]?.[0]?.name}
+                  onChange={(event) => {
+                    setAnyDataFromModal(event.target.value, el.field);
+                  }}
                   label={el.headerName}>
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  {data[el.field]?.map(
+                    (item: { id: number; name: string }, index: number) =>
+                      item.name !== anyData[el.field]?.name && (
+                        <MenuItem value={item.name} key={`${item.id}${index}`}>
+                          {item.name}
+                        </MenuItem>
+                      )
+                  )}
                 </Select>
               </FormControl>
             )}
@@ -108,7 +134,7 @@ const EditModal: React.FC<IEditModal> = ({
           size="medium"
           sx={{ width: "25ch" }}
           color="success"
-          onClick={handleEdit}>
+          onClick={handleSave}>
           Save
         </Button>
         <Button

@@ -1,45 +1,65 @@
+import { TableCell, TableRow } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import React from "react";
 import TableData from "../../UI/Table/TableData";
 import {
   deleteEmployee,
   getEmployees,
+  getRoles,
 } from "../../controllers/EmployeeController";
+import { uniqArrayForModal } from "../../utills/dataUtil";
 import Header from "../Header/Header";
 import styles from "./Employees.module.sass";
-import { TableCell, TableRow } from "@mui/material";
 
 const columns: GridColDef[] = [
   { field: "fio", headerName: "FIO", type: "string" },
   { field: "phone", headerName: "Phone Number", type: "number" },
   { field: "role", headerName: "Role", type: "select" },
+  { field: "roleSelect", headerName: "Role", type: "select" },
 ];
 
 const Employees: React.FC = () => {
   const [data, setData] = React.useState([]);
+  const [dataRoles, setDataRoles] = React.useState<any>([]);
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState<string | undefined>(undefined);
   const [editData, setEditData] = React.useState<any>(null);
 
+  const fetchDataRoles = React.useCallback(async () => {
+    const roles = await getRoles();
+    if (roles.length) {
+      setDataRoles(roles);
+    } else {
+      setDataRoles([]);
+    }
+  }, []);
+
   const fetchData = React.useCallback(async () => {
     const dataTable = await getEmployees();
+    fetchDataRoles();
     if (dataTable.length) {
       setData(dataTable);
     } else {
       setData([]);
     }
-  }, []);
+  }, [fetchDataRoles]);
 
   const handleOpen = React.useCallback((id?: string) => {
     setOpen((openModal) => !openModal);
     setId(id);
   }, []);
 
-  const handleSetCurrentData = React.useCallback((currentData: any) => {
-    setEditData(currentData);
-  }, []);
+  const handleSetCurrentData = React.useCallback(
+    (currentData: any) => {
+      const newObj = uniqArrayForModal(dataRoles, currentData, "role");
+      setEditData(newObj);
+    },
+    [dataRoles]
+  );
 
-  const handleEdit = React.useCallback((data: any) => {}, []);
+    const handleEdit = React.useCallback((data: any) => {
+        console.log('data = ', data);
+  }, []);
 
   const handleDelete = React.useCallback(async () => {
     if (id) {
