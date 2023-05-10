@@ -35,6 +35,6 @@ export const editEmployee = async (id: string, fio: string, idRole: number, phon
     if (data) {
         return data;
     } else {
-        return "Не получилось удалить";
+        return "Не получилось отредактировать";
     }
 };

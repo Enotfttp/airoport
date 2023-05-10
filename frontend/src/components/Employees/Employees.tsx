@@ -8,14 +8,17 @@ import {
   getEmployees,
   getRoles,
 } from "../../controllers/EmployeeController";
-import { checkIsArrayDataFromModal, uniqArrayForModal } from "../../utills/dataUtil";
+import {
+  checkIsArrayDataFromModal,
+  uniqArrayForModal,
+} from "../../utills/dataUtil";
 import Header from "../Header/Header";
 import styles from "./Employees.module.sass";
 
 const columns: GridColDef[] = [
   { field: "fio", headerName: "FIO", type: "string" },
   { field: "phone", headerName: "Phone Number", type: "number" },
-  { field: "role", headerName: "Role", type: "select" },
+  { field: "role", headerName: "Role" },
   { field: "roleSelect", headerName: "Role", type: "select" },
 ];
 
@@ -84,7 +87,8 @@ const Employees: React.FC = () => {
     <>
       <Header />
       <h2 className={styles.employees_title}>Employees</h2>
-      <TableData
+          <TableData
+        
         columns={columns}
         openModal={open}
         data={editData}

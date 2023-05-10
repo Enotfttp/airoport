@@ -3,6 +3,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import React from "react";
 import TableData from "../../UI/Table/TableData";
 import {
+  addAirline,
   deleteAirline,
   editAirline,
   getAirlines,
@@ -45,16 +46,28 @@ const Airlines: React.FC = () => {
     setEditData(currentData);
   }, []);
 
-  const handleEdit = React.useCallback((data: any) => {
-    editAirline(
-      data.id,
+  const handleAdd = React.useCallback((data: any) => {
+    console.log("data = ", data);
+    addAirline(
       data.nameCompany,
       convertDateToString(data.createYears),
       data.countPlanes
     );
-    fetchData()
-    setOpen(false);
-  }, [fetchData]);
+  }, []);
+
+  const handleEdit = React.useCallback(
+    (data: any) => {
+      editAirline(
+        data.id,
+        data.nameCompany,
+        convertDateToString(data.createYears),
+        data.countPlanes
+      );
+      fetchData();
+      setOpen(false);
+    },
+    [fetchData]
+  );
 
   const handleDelete = React.useCallback(async () => {
     if (id) {
@@ -77,12 +90,13 @@ const Airlines: React.FC = () => {
         openModal={open}
         data={editData}
         handleEdit={handleEdit}
+        handleAdd={handleAdd}
         handleClose={handleOpen}
         handleDelete={handleDelete}>
         {data.length &&
-          data.map((row: any) => (
+          data.map((row: any, index: number) => (
             <TableRow
-              key={row.id}
+              key={`${row.id}${index}`}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               className={styles.table_cell}
               onClick={() => {

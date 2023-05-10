@@ -1,4 +1,4 @@
-import { deleteRequest, getRequest, putRequest } from "../axios/http"
+import { deleteRequest, getRequest, postRequest, putRequest } from "../axios/http"
 
 export const getFlights = async () => {
     const data = await getRequest('/api/flights');
@@ -53,6 +53,16 @@ export const editFlight = async (data: { idFlight: number, departure: string, ar
     if (res) {
         return res;
     } else {
-        return "Не получилось удалить";
+        return "Не получилось отредактировать";
+    }
+};
+
+export const addFlight = async (data: { departure: string, arrival: string, departureCiry: string, arrivalCiry: string, idEnter: number, idPilot: number, idStatus: number, idAirline: number, idPlane: number }) => {
+    const res = await postRequest(`/api/flight/add`, {}, { ...data });
+    if (res) {
+        getFlights()
+        return res;
+    } else {
+        return "Не получилось добавить новый полёт";
     }
 };

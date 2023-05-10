@@ -5,6 +5,7 @@ import TableData from "../../UI/Table/TableData";
 import { getAirlines } from "../../controllers/AirlinesController";
 import { getEmployees } from "../../controllers/EmployeeController";
 import {
+  addFlight,
   deleteFlight,
   editFlight,
   getAircrafts,
@@ -25,16 +26,16 @@ const columns: GridColDef[] = [
   { field: "departureCiry", headerName: "Departure City", type: "string" },
   { field: "arrival", headerName: "Arrival", type: "date" },
   { field: "arrivalCiry", headerName: "Arrival Ciry", type: "string" },
-  { field: "nameCompany", headerName: "Name Company", type: "select" },
-  { field: "status", headerName: "status", type: "select" },
-  { field: "fio", headerName: "FIO", type: "select" },
-  { field: "plane", headerName: "Plane", type: "select" },
-  { field: "enter", headerName: "Enter", type: "select" },
+  { field: "nameCompany", headerName: "Name Company" },
+  { field: "status", headerName: "status" },
+  { field: "fio", headerName: "FIO" },
+  { field: "plane", headerName: "Plane" },
+  { field: "enter", headerName: "Enter" },
   { field: "nameCompanySelect", headerName: "Name Company", type: "select" },
   { field: "statusSelect", headerName: "Status", type: "select" },
   { field: "enterSelect", headerName: "Enter", type: "select" },
   { field: "planeSelect", headerName: "Plane", type: "select" },
-  { field: "fioSelect", headerName: "Plane", type: "select" },
+  { field: "fioSelect", headerName: "FIO", type: "select" },
 ];
 
 const Flights: React.FC = () => {
@@ -142,6 +143,24 @@ const Flights: React.FC = () => {
     [dataAirlines, dataStatuses, dataEnters, dataAircrafts, dataEmployees]
   );
 
+  const handleAdd = React.useCallback(
+    (data: any) => {
+      addFlight({
+        departure: convertDateToString(data.departure),
+        arrival: convertDateToString(data.arrival),
+        departureCiry: data.departureCiry,
+        arrivalCiry: data.arrivalCiry,
+        idEnter: checkIsArrayDataFromModal(data.enterSelect),
+        idPilot: checkIsArrayDataFromModal(data.fioSelect),
+        idStatus: checkIsArrayDataFromModal(data.statusSelect),
+        idAirline: checkIsArrayDataFromModal(data.nameCompanySelect),
+        idPlane: checkIsArrayDataFromModal(data.planeSelect),
+      });
+      fetchData();
+    },
+    [fetchData]
+  );
+
   const handleEdit = React.useCallback((data: any) => {
     editFlight({
       idFlight: data.id,
@@ -177,15 +196,24 @@ const Flights: React.FC = () => {
       <TableData
         columns={columns}
         openModal={open}
-        data={editData}
+        data={
+          editData || {
+            nameCompanySelect: dataAirlines,
+            statusSelect: dataStatuses,
+            enterSelect: dataEnters,
+            planeSelect: dataAircrafts,
+            fioSelect: dataEmployees,
+          }
+        }
         handleClose={handleOpen}
         handleEdit={handleEdit}
+        handleAdd={handleAdd}
         handleDelete={handleDelete}>
         {data.length &&
-          data.map((row: any) => (
+          data.map((row: any, index) => (
             <>
               <TableRow
-                key={row.id}
+                key={`${row.id}${index}`}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 className={styles.table_cell}
                 onClick={() => {
