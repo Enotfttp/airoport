@@ -46,15 +46,15 @@ const Airlines: React.FC = () => {
   }, []);
 
   const handleEdit = React.useCallback((data: any) => {
-    console.log("data.createYears = ", data.createYears);
     editAirline(
       data.id,
       data.nameCompany,
       convertDateToString(data.createYears),
       data.countPlanes
     );
+    fetchData()
     setOpen(false);
-  }, []);
+  }, [fetchData]);
 
   const handleDelete = React.useCallback(async () => {
     if (id) {
