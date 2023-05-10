@@ -246,6 +246,16 @@ server.put("/api/flight/edit/:idFlight", function (req, res) {
     });
 });
 
+// Добавление полёта
+server.post("/api/flight/add", function (req, res) {
+    if (!req.body) return res.sendStatus(400);
+    const { departure, arrival, departureCiry, arrivalCiry, idEnter, idPilot, idStatus, idAirline, idPlane } = req.body;
+    pool.query(`INSERT INTO \`flights\` (\`idПолета\`, \`Время вылета\`, \`Время прилета\`, \`Город вылета\`, \`Город приелта\`, \`idВхода\`, \`idСотрудника\`, \`idСтатуса\`, \`idАвиакомпании\`, \`idСамолета\`) VALUES (NULL, '${departure}', '${arrival}', '${departureCiry}', '${arrivalCiry}', '${idEnter}', '${idPilot}', '${idStatus}', '${idAirline}', '${idPlane}')`, function(err, data) {
+        if (err) return console.error(err);
+        res.json('flight updated');
+    });
+});
+
 
 // Получение информации обо всех авиакомпаниях
 server.get("/api/airlines", function(req, res){
@@ -282,7 +292,7 @@ server.delete("/api/airline/delete/:id", function (req, res) {
     });
 });
 
-// Редактирование пользователя
+// Редактирование авиакомпании
 server.put("/api/airline/edit/:id", function (req, res) {
     if(!req.body) return res.sendStatus(400);
     const { id, nameCompany, createYears, countPlanes } = req.body;
@@ -292,5 +302,12 @@ server.put("/api/airline/edit/:id", function (req, res) {
     });
 });
 
-// Создание полёта 
-// INSERT INTO `flights` (`idПолета`, `Время вылета`, `Время прилета`, `Город вылета`, `Город приелта`, `idВхода`, `idСотрудника`, `idСтатуса`, `idАвиакомпании`, `idСамолета`) VALUES (NULL, '2023-05-01', '2023-05-01', 'Нижний Новгород', 'Москва', '1', '3', '1', '1', '1');
+// Добавление авиакомпании
+server.put("/api/airline/add", function (req, res) {
+    if(!req.body) return res.sendStatus(400);
+    const { nameCompany, createYears, countPlanes } = req.body;
+    pool.query(`INSERT INTO \`airlines\` (\`idАвиакомпании\`, \`Название авиакомпании\`, \`Год основания\`, \`Количество самолётов\`) VALUES (NULL, '${nameCompany}', '${createYears}', '${countPlanes}')`, function(err, data) {
+        if (err) return console.error(err);
+        res.json('airline updated');
+    });
+});
