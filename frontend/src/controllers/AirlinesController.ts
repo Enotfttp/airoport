@@ -18,7 +18,7 @@ export const deleteAirline = async (id: string) => {
     }
 };
 
-export const editAirline = async (id: string, nameCompany: string, createYears: number, countPlanes: number) => {
+export const editAirline = async (id: string, nameCompany: string, createYears: string, countPlanes: number) => {
     const data = await putRequest(`/api/airline/edit/${id}`, {}, { id, nameCompany, createYears, countPlanes });
     if (data) {
         return data;

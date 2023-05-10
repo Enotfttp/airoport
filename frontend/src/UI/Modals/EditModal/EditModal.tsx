@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import React from "react";
 import styles from "./EditModal.module.sass";
 
@@ -103,10 +103,13 @@ const EditModal: React.FC<IEditModal> = ({
               </FormControl>
             )}
             {el.type === "date" && (
-              <LocalizationProvider
-                dateAdapter={AdapterDayjs}
-                className={styles["edit_modal-block-date"]}>
-                <DatePicker />
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  value={anyData[el.field] || new Date(data[el.field])}
+                  onChange={(value) => {
+                    setAnyDataFromModal(value, el.field);
+                  }}
+                />
               </LocalizationProvider>
             )}
             {el.type === "select" && Array.isArray(data[el.field]) && (

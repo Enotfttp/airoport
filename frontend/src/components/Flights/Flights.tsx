@@ -12,10 +12,13 @@ import {
   getFlights,
   getStatuses,
 } from "../../controllers/FlightController";
-import { dateConverter } from "../../utills/dateUtills";
+import {
+  checkIsArrayDataFromModal,
+  uniqArrayForModal,
+} from "../../utills/dataUtil";
+import { convertDateToString, dateConverter } from "../../utills/dateUtills";
 import Header from "../Header/Header";
 import styles from "./Flights.module.sass";
-import { checkIsArrayDataFromModal, uniqArrayForModal } from "../../utills/dataUtil";
 
 const columns: GridColDef[] = [
   { field: "departure", headerName: "Departure", type: "date" },
@@ -142,8 +145,8 @@ const Flights: React.FC = () => {
   const handleEdit = React.useCallback((data: any) => {
     editFlight({
       idFlight: data.id,
-      departure: data.departure,
-      arrival: data.arrival,
+      departure: convertDateToString(data.departure),
+      arrival: convertDateToString(data.arrival),
       departureCiry: data.departureCiry,
       arrivalCiry: data.arrivalCiry,
       idEnter: checkIsArrayDataFromModal(data.enterSelect),

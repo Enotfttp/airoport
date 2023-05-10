@@ -7,7 +7,7 @@ import {
   editAirline,
   getAirlines,
 } from "../../controllers/AirlinesController";
-import { dateConverter } from "../../utills/dateUtills";
+import { convertDateToString, dateConverter } from "../../utills/dateUtills";
 import Header from "../Header/Header";
 import styles from "./Airlines.module.sass";
 
@@ -46,7 +46,13 @@ const Airlines: React.FC = () => {
   }, []);
 
   const handleEdit = React.useCallback((data: any) => {
-    editAirline(data.id, data.nameCompany, data.createYears, data.countPlanes);
+    console.log("data.createYears = ", data.createYears);
+    editAirline(
+      data.id,
+      data.nameCompany,
+      convertDateToString(data.createYears),
+      data.countPlanes
+    );
     setOpen(false);
   }, []);
 
