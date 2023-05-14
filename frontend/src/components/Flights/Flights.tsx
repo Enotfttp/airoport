@@ -27,7 +27,7 @@ const columns: GridColDef[] = [
   { field: "arrival", headerName: "Arrival", type: "dateTime" },
   { field: "arrivalCiry", headerName: "Arrival Ciry", type: "string" },
   { field: "nameCompany", headerName: "Name Company" },
-  { field: "status", headerName: "status" },
+  { field: "status", headerName: "Status" },
   { field: "fio", headerName: "FIO" },
   { field: "plane", headerName: "Plane" },
   { field: "enter", headerName: "Enter" },
