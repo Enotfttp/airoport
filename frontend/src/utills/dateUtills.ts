@@ -25,7 +25,8 @@ export const dateForModal = (data: string, type: "dateTime" | "date") => {
 }
 
 export const dateForAnswerToBackend = (data: string) => {
-    return data.split('T').join(' ');
+    const { fullYear, month, day, hours, minutes } = getInfoFromDate(data);
+    return `${fullYear}-${month}-${day} ${hours}:${minutes}:00`;
 }
 
 export const convertDateToString = (data: Date | string) => {

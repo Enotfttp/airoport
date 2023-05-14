@@ -1,16 +1,16 @@
 import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
+    Button,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    OutlinedInput,
+    Select,
 } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import {
-  DatePicker,
-  DateTimePicker,
-  LocalizationProvider,
+    DatePicker,
+    DateTimePicker,
+    LocalizationProvider,
 } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -114,8 +114,8 @@ const EditModal: React.FC<IEditModal> = ({
                   label={el.headerName}
                   defaultValue={dayjs(data[el.field])}
                   value={anyData[el.field]}
-                  onChange={(value) => {
-                    setAnyDataFromModal(value, el.field);
+                  onChange={(event:any) => {
+                    setAnyDataFromModal(event.$d, el.field);
                   }}
                 />
               </LocalizationProvider>

@@ -1,19 +1,20 @@
 import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
+    Button,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    OutlinedInput,
+    Select,
 } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import {
-  DatePicker,
-  DateTimePicker,
-  LocalizationProvider,
+    DatePicker,
+    DateTimePicker,
+    LocalizationProvider,
 } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 import React from "react";
 import styles from "./AddModal.module.sass";
 
@@ -104,7 +105,7 @@ const AddModal: React.FC<IAddModal> = ({
                     type="text"
                     label={el.headerName}
                     autoComplete="off"
-                    value={anyData[el.field] || ""}
+                    value={anyData?.[el.field] || ""}
                     onChange={(event) =>
                       setAnyDataFromModal(event.target.value, el.field)
                     }
@@ -124,7 +125,7 @@ const AddModal: React.FC<IAddModal> = ({
                     type="number"
                     label={el.headerName}
                     autoComplete="off"
-                    value={anyData[el.field] || ""}
+                    value={anyData?.[el.field] || ""}
                     onChange={(event) =>
                       setAnyDataFromModal(event.target.value, el.field)
                     }
@@ -135,9 +136,9 @@ const AddModal: React.FC<IAddModal> = ({
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateTimePicker
                     label={el.headerName}
-                    value={anyData[el.field]}
-                    onChange={(value) => {
-                      setAnyDataFromModal(value, el.field);
+                    value={dayjs(anyData?.[el.field]) || ""}
+                    onChange={(event:any) => {
+                      setAnyDataFromModal(event.$d, el.field);
                     }}
                   />
                 </LocalizationProvider>
@@ -146,7 +147,7 @@ const AddModal: React.FC<IAddModal> = ({
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     label={el.headerName}
-                    value={anyData[el.field]}
+                    value={anyData?.[el.field] || ""}
                     onChange={(value) => {
                       setAnyDataFromModal(value, el.field);
                     }}
@@ -164,12 +165,12 @@ const AddModal: React.FC<IAddModal> = ({
                   <Select
                     labelId="demo-simple-select-standard-label"
                     id="demo-simple-select-standard"
-                    value={anyData[el.field]?.name || ""}
+                    value={anyData?.[el.field]?.name || ""}
                     onChange={(event) => {
                       setAnyDataFromModal(event.target.value, el.field);
                     }}
                     label={el.headerName}>
-                    {data[el.field]?.map(
+                    {data?.[el.field]?.map(
                       (item: { id: number; name: string }, index: number) => (
                         <MenuItem value={item.name} key={`${item.id}${index}`}>
                           {item.name}

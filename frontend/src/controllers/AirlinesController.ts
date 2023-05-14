@@ -1,9 +1,14 @@
 import { deleteRequest, getRequest, postRequest, putRequest } from "../axios/http"
+import { dateForModal } from "../utills/dateUtills";
 
 export const getAirlines = async () => {
     const data = await getRequest('/api/airlines');
     if (data) {
-        return data
+        const res = data.map((el: any) => ({
+            ...el,
+            createYears: dateForModal(el.createYears, "date"),
+        }));
+        return res
     } else {
         return 'Данных нет'
     }
@@ -30,8 +35,8 @@ export const editAirline = async (id: string, nameCompany: string, createYears: 
 export const addAirline = async (nameCompany: string, createYears: string, countPlanes: number) => {
     const data = await postRequest(`/api/airline/add`, {}, { nameCompany, createYears, countPlanes });
     if (data) {
-        getAirlines();
-        return data;
+        const res = await getAirlines();
+        return res
     } else {
         return "Не получилось добавить новый аэркомпанию";
     }

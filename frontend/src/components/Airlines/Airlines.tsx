@@ -8,11 +8,7 @@ import {
   editAirline,
   getAirlines,
 } from "../../controllers/AirlinesController";
-import {
-  convertDateToString,
-  dateConverter,
-  dateForModal,
-} from "../../utills/dateUtills";
+import { convertDateToString, dateConverter } from "../../utills/dateUtills";
 import Header from "../Header/Header";
 import styles from "./Airlines.module.sass";
 
@@ -27,15 +23,10 @@ const Airlines: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState<string | undefined>(undefined);
   const [editData, setEditData] = React.useState<any>(null);
-
   const fetchData = React.useCallback(async () => {
     const dataTable = await getAirlines();
     if (dataTable.length) {
-      const res = dataTable.map((el: any) => ({
-        ...el,
-        createYears: dateForModal(el.createYears, "date"),
-      }));
-      setData(res);
+      setData(dataTable);
     } else {
       setData([]);
     }
@@ -50,18 +41,15 @@ const Airlines: React.FC = () => {
     setEditData(currentData);
   }, []);
 
-  const handleAdd = React.useCallback(
-    (data: any) => {
-      addAirline(
-        data.nameCompany,
-        convertDateToString(data.createYears),
-        data.countPlanes
-      );
-      fetchData();
-      setOpen(false);
-    },
-    [fetchData]
-  );
+  const handleAdd = React.useCallback(async (data: any) => {
+    const dataTable = await addAirline(
+      data.nameCompany,
+      convertDateToString(data.createYears),
+      data.countPlanes
+    );
+    setData(dataTable);
+    setOpen(false);
+  }, []);
 
   const handleEdit = React.useCallback(
     (data: any) => {

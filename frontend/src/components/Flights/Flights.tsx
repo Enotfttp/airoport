@@ -17,11 +17,7 @@ import {
   checkIsArrayDataFromModal,
   uniqArrayForModal,
 } from "../../utills/dataUtil";
-import {
-  dateConverter,
-  dateForAnswerToBackend,
-  dateForModal,
-} from "../../utills/dateUtills";
+import { dateConverter, dateForAnswerToBackend } from "../../utills/dateUtills";
 import Header from "../Header/Header";
 import styles from "./Flights.module.sass";
 
@@ -113,12 +109,7 @@ const Flights: React.FC = () => {
     fetchDataAircrafts();
     fetchDataEmployees();
     if (dataTable.length) {
-      const res = dataTable.map((el: any) => ({
-        ...el,
-        departure: dateForModal(el.departure, "dateTime"),
-        arrival: dateForModal(el.arrival, "dateTime"),
-      }));
-      setData(res);
+      setData(dataTable);
     } else {
       setData([]);
     }
@@ -147,23 +138,20 @@ const Flights: React.FC = () => {
     [dataAirlines, dataStatuses, dataEnters, dataAircrafts, dataEmployees]
   );
 
-  const handleAdd = React.useCallback(
-    (data: any) => {
-      addFlight({
-        departure: dateForAnswerToBackend(data.departure),
-        arrival: dateForAnswerToBackend(data.arrival),
-        departureCiry: data.departureCiry,
-        arrivalCiry: data.arrivalCiry,
-        idEnter: checkIsArrayDataFromModal(data.enterSelect),
-        idPilot: checkIsArrayDataFromModal(data.fioSelect),
-        idStatus: checkIsArrayDataFromModal(data.statusSelect),
-        idAirline: checkIsArrayDataFromModal(data.nameCompanySelect),
-        idPlane: checkIsArrayDataFromModal(data.planeSelect),
-      });
-      fetchData();
-    },
-    [fetchData]
-  );
+    const handleAdd = React.useCallback(async (data: any) => {
+    const dataTable = await addFlight({
+      departure: dateForAnswerToBackend(data.departure),
+      arrival: dateForAnswerToBackend(data.arrival),
+      departureCiry: data.departureCiry,
+      arrivalCiry: data.arrivalCiry,
+      idEnter: checkIsArrayDataFromModal(data.enterSelect),
+      idPilot: checkIsArrayDataFromModal(data.fioSelect),
+      idStatus: checkIsArrayDataFromModal(data.statusSelect),
+      idAirline: checkIsArrayDataFromModal(data.nameCompanySelect),
+      idPlane: checkIsArrayDataFromModal(data.planeSelect),
+    });
+    setData(dataTable);
+  }, []);
 
   const handleEdit = React.useCallback((data: any) => {
     editFlight({
