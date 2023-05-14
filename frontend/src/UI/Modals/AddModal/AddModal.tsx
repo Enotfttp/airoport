@@ -134,7 +134,7 @@ const AddModal: React.FC<IAddModal> = ({
               {el.type === "dateTime" && (
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateTimePicker
-                    label="Controlled picker"
+                    label={el.headerName}
                     value={anyData[el.field]}
                     onChange={(value) => {
                       setAnyDataFromModal(value, el.field);
@@ -145,6 +145,7 @@ const AddModal: React.FC<IAddModal> = ({
               {el.type === "date" && (
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
+                    label={el.headerName}
                     value={anyData[el.field]}
                     onChange={(value) => {
                       setAnyDataFromModal(value, el.field);

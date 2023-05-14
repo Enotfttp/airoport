@@ -111,7 +111,7 @@ const EditModal: React.FC<IEditModal> = ({
             {el.type === "dateTime" && (
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
-                  label="Controlled picker"
+                  label={el.headerName}
                   defaultValue={dayjs(data[el.field])}
                   value={anyData[el.field]}
                   onChange={(value) => {
@@ -123,6 +123,7 @@ const EditModal: React.FC<IEditModal> = ({
             {el.type === "date" && (
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
+                  label={el.headerName}
                   value={anyData[el.field] || new Date(data[el.field])}
                   onChange={(value) => {
                     setAnyDataFromModal(value, el.field);
