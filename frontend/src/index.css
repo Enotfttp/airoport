@@ -5,7 +5,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(90deg, #cfecd0, #ffc5ca);
+  background-image: url(../public/background.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
   height: 100vh;
 }
 

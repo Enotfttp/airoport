@@ -7,8 +7,14 @@ import {
   Select,
 } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import {
+  DatePicker,
+  DateTimePicker,
+  LocalizationProvider,
+} from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 import React from "react";
 import styles from "./EditModal.module.sass";
 
@@ -101,6 +107,18 @@ const EditModal: React.FC<IEditModal> = ({
                   }
                 />
               </FormControl>
+            )}
+            {el.type === "dateTime" && (
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateTimePicker
+                  label="Controlled picker"
+                  defaultValue={dayjs(data[el.field])}
+                  value={anyData[el.field]}
+                  onChange={(value) => {
+                    setAnyDataFromModal(value, el.field);
+                  }}
+                />
+              </LocalizationProvider>
             )}
             {el.type === "date" && (
               <LocalizationProvider dateAdapter={AdapterDateFns}>

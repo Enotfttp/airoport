@@ -22,7 +22,6 @@ interface ITable {
   handleEdit: (data: any) => void;
   openModal: boolean;
   data: any;
-  fetchData?: any;
 }
 const TableData: React.FC<ITable> = ({
   columns,
@@ -33,7 +32,6 @@ const TableData: React.FC<ITable> = ({
   handleDelete,
   openModal,
   data,
-  fetchData,
 }) => {
   const [isShowAddModal, setShowAddModal] = React.useState(false);
   const handleShowAddModal = React.useCallback(() => {
@@ -60,9 +58,11 @@ const TableData: React.FC<ITable> = ({
           <TableHead>
             <TableRow>
               {columns.map(
-                (elem) =>
+                (elem, index) =>
                   !elem.field.includes("Select") && (
-                    <TableCell className={styles.table_cell} key={elem.field}>
+                    <TableCell
+                      className={styles.table_cell}
+                      key={`${elem.field}${index}`}>
                       {elem.headerName}
                     </TableCell>
                   )

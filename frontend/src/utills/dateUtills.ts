@@ -1,5 +1,31 @@
-export const dateConverter = (data: string) => {
-    return data.split('T')[0];
+export const getInfoFromDate = (data: string) => {
+    const date = new Date(data);
+    const fullYear = date.getFullYear();
+    const month = `0${date.getMonth()}`.slice(-2);
+    const day = `0${date.getDate()}`.slice(-2);
+    const hours = `0${date.getHours()}`.slice(-2);
+    const minutes = `0${date.getMinutes()}`.slice(-2);
+    return { fullYear, month, day, hours, minutes }
+}
+
+export const dateConverter = (data: string, type: "dateTime" | "date") => {
+    const { fullYear, month, day, hours, minutes } = getInfoFromDate(data)
+    if (type === 'dateTime') {
+        return `${day}-${month}-${fullYear} ${hours}:${minutes}`;
+    }
+    return `${fullYear}-${month}-${day}`;
+}
+
+export const dateForModal = (data: string, type: "dateTime" | "date") => {
+    const { fullYear, month, day, hours, minutes } = getInfoFromDate(data)
+    if (type === 'dateTime') {
+        return `${fullYear}-${month}-${day}T${hours}:${minutes}`;
+    }
+    return `${fullYear}-${month}-${day}`;
+}
+
+export const dateForAnswerToBackend = (data: string) => {
+    return data.split('T').join(' ');
 }
 
 export const convertDateToString = (data: Date | string) => {

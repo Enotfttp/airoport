@@ -7,8 +7,13 @@ import {
   Select,
 } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import {
+  DatePicker,
+  DateTimePicker,
+  LocalizationProvider,
+} from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import React from "react";
 import styles from "./AddModal.module.sass";
 
@@ -66,14 +71,17 @@ const AddModal: React.FC<IAddModal> = ({
   );
 
   const handleSave = React.useCallback(() => {
-    Object.entries(data).forEach(([key, value]) => {
-      if (!anyData[key]) anyData[key] = value;
-    });
     if (typeof handleAdd === "function") {
       handleAdd(anyData);
+      setAnyData(null);
       onClose();
     }
-  }, [anyData, data, handleAdd, onClose]);
+  }, [anyData, handleAdd, onClose]);
+
+  const handleClose = React.useCallback(() => {
+    setAnyData({});
+    onClose();
+  }, [onClose]);
 
   if (!isShow) return null;
   return (
@@ -123,10 +131,21 @@ const AddModal: React.FC<IAddModal> = ({
                   />
                 </FormControl>
               )}
+              {el.type === "dateTime" && (
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                    label="Controlled picker"
+                    value={anyData[el.field]}
+                    onChange={(value) => {
+                      setAnyDataFromModal(value, el.field);
+                    }}
+                  />
+                </LocalizationProvider>
+              )}
               {el.type === "date" && (
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
-                    value={anyData[el.field] || new Date()}
+                    value={anyData[el.field]}
                     onChange={(value) => {
                       setAnyDataFromModal(value, el.field);
                     }}
@@ -176,7 +195,7 @@ const AddModal: React.FC<IAddModal> = ({
             variant="contained"
             size="medium"
             sx={{ width: "25ch" }}
-            onClick={onClose}>
+            onClick={handleClose}>
             No
           </Button>
         </div>

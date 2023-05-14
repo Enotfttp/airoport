@@ -17,14 +17,18 @@ import {
   checkIsArrayDataFromModal,
   uniqArrayForModal,
 } from "../../utills/dataUtil";
-import { convertDateToString, dateConverter } from "../../utills/dateUtills";
+import {
+  dateConverter,
+  dateForAnswerToBackend,
+  dateForModal,
+} from "../../utills/dateUtills";
 import Header from "../Header/Header";
 import styles from "./Flights.module.sass";
 
 const columns: GridColDef[] = [
-  { field: "departure", headerName: "Departure", type: "date" },
+  { field: "departure", headerName: "Departure", type: "dateTime" },
   { field: "departureCiry", headerName: "Departure City", type: "string" },
-  { field: "arrival", headerName: "Arrival", type: "date" },
+  { field: "arrival", headerName: "Arrival", type: "dateTime" },
   { field: "arrivalCiry", headerName: "Arrival Ciry", type: "string" },
   { field: "nameCompany", headerName: "Name Company" },
   { field: "status", headerName: "status" },
@@ -111,8 +115,8 @@ const Flights: React.FC = () => {
     if (dataTable.length) {
       const res = dataTable.map((el: any) => ({
         ...el,
-        departure: dateConverter(el.departure),
-        arrival: dateConverter(el.arrival),
+        departure: dateForModal(el.departure, "dateTime"),
+        arrival: dateForModal(el.arrival, "dateTime"),
       }));
       setData(res);
     } else {
@@ -146,8 +150,8 @@ const Flights: React.FC = () => {
   const handleAdd = React.useCallback(
     (data: any) => {
       addFlight({
-        departure: convertDateToString(data.departure),
-        arrival: convertDateToString(data.arrival),
+        departure: dateForAnswerToBackend(data.departure),
+        arrival: dateForAnswerToBackend(data.arrival),
         departureCiry: data.departureCiry,
         arrivalCiry: data.arrivalCiry,
         idEnter: checkIsArrayDataFromModal(data.enterSelect),
@@ -164,8 +168,8 @@ const Flights: React.FC = () => {
   const handleEdit = React.useCallback((data: any) => {
     editFlight({
       idFlight: data.id,
-      departure: convertDateToString(data.departure),
-      arrival: convertDateToString(data.arrival),
+      departure: dateForAnswerToBackend(data.departure),
+      arrival: dateForAnswerToBackend(data.arrival),
       departureCiry: data.departureCiry,
       arrivalCiry: data.arrivalCiry,
       idEnter: checkIsArrayDataFromModal(data.enterSelect),
@@ -220,9 +224,13 @@ const Flights: React.FC = () => {
                   handleOpen(row.id);
                   handleSetCurrentData(row);
                 }}>
-                <TableCell align="left">{row.departure}</TableCell>
+                <TableCell align="left">
+                  {dateConverter(row.departure, "dateTime")}
+                </TableCell>
                 <TableCell align="left">{row.departureCiry}</TableCell>
-                <TableCell align="left">{row.arrival}</TableCell>
+                <TableCell align="left">
+                  {dateConverter(row.arrival, "dateTime")}
+                </TableCell>
                 <TableCell align="left">{row.arrivalCiry}</TableCell>
                 <TableCell align="left">{row.nameCompany}</TableCell>
                 <TableCell align="left">{row.status}</TableCell>

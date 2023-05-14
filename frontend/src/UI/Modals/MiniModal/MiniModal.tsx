@@ -1,9 +1,9 @@
 import Button from "@mui/material/Button";
+import { GridColDef } from "@mui/x-data-grid";
 import React from "react";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import EditModal from "../EditModal/EditModal";
 import styles from "./MiniModal.module.sass";
-import { GridColDef } from "@mui/x-data-grid";
 
 interface IMiniModal {
   open?: boolean;

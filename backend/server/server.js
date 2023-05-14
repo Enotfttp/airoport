@@ -303,7 +303,7 @@ server.put("/api/airline/edit/:id", function (req, res) {
 });
 
 // Добавление авиакомпании
-server.put("/api/airline/add", function (req, res) {
+server.post("/api/airline/add", function (req, res) {
     if(!req.body) return res.sendStatus(400);
     const { nameCompany, createYears, countPlanes } = req.body;
     pool.query(`INSERT INTO \`airlines\` (\`idАвиакомпании\`, \`Название авиакомпании\`, \`Год основания\`, \`Количество самолётов\`) VALUES (NULL, '${nameCompany}', '${createYears}', '${countPlanes}')`, function(err, data) {

@@ -9,6 +9,7 @@ interface IDeleteModal {
 }
 
 const DeleteModal: React.FC<IDeleteModal> = ({ onDelete, onClose, isShow }) => {
+
   if (!isShow) return null;
   return (
     <div className={styles.delete_modal}>

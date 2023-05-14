@@ -8,7 +8,11 @@ import {
   editAirline,
   getAirlines,
 } from "../../controllers/AirlinesController";
-import { convertDateToString, dateConverter } from "../../utills/dateUtills";
+import {
+  convertDateToString,
+  dateConverter,
+  dateForModal,
+} from "../../utills/dateUtills";
 import Header from "../Header/Header";
 import styles from "./Airlines.module.sass";
 
@@ -29,7 +33,7 @@ const Airlines: React.FC = () => {
     if (dataTable.length) {
       const res = dataTable.map((el: any) => ({
         ...el,
-        createYears: dateConverter(el.createYears),
+        createYears: dateForModal(el.createYears, "date"),
       }));
       setData(res);
     } else {
@@ -46,14 +50,18 @@ const Airlines: React.FC = () => {
     setEditData(currentData);
   }, []);
 
-  const handleAdd = React.useCallback((data: any) => {
-    console.log("data = ", data);
-    addAirline(
-      data.nameCompany,
-      convertDateToString(data.createYears),
-      data.countPlanes
-    );
-  }, []);
+  const handleAdd = React.useCallback(
+    (data: any) => {
+      addAirline(
+        data.nameCompany,
+        convertDateToString(data.createYears),
+        data.countPlanes
+      );
+      fetchData();
+      setOpen(false);
+    },
+    [fetchData]
+  );
 
   const handleEdit = React.useCallback(
     (data: any) => {
@@ -104,7 +112,9 @@ const Airlines: React.FC = () => {
                 handleSetCurrentData(row);
               }}>
               <TableCell align="left">{row.nameCompany}</TableCell>
-              <TableCell align="left">{row.createYears}</TableCell>
+              <TableCell align="left">
+                {dateConverter(row.createYears, "date")}
+              </TableCell>
               <TableCell align="left">{row.countPlanes}</TableCell>
             </TableRow>
           ))}
