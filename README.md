@@ -22,6 +22,5 @@ What was doing in this project?
 4) Create, Edit, Delete, fields in the tables
 
 Will be soon
-1) Need to refactoring add Modal for Flight and Airline tables
-2) Add state manager. It will be Redax
-3) Add JWT token for auto autofication
+1) Add state manager. It will be Redax
+2) Add JWT token for auto autofication
