@@ -61,15 +61,19 @@ const Employees: React.FC = () => {
     [dataRoles]
   );
 
-  const handleEdit = React.useCallback((data: any) => {
-    editEmployee(
-      data.id,
-      data.fio,
-      checkIsArrayDataFromModal(data.roleSelect),
-      data.phone
-    );
-    setOpen(false);
-  }, []);
+  const handleEdit = React.useCallback(
+    (data: any) => {
+      editEmployee(
+        data.id,
+        data.fio,
+        checkIsArrayDataFromModal(data.roleSelect),
+        data.phone
+      );
+      setOpen(false);
+      fetchData();
+    },
+    [fetchData]
+  );
 
   const handleDelete = React.useCallback(async () => {
     if (id) {
@@ -87,8 +91,7 @@ const Employees: React.FC = () => {
     <>
       <Header />
       <h2 className={styles.employees_title}>Employees</h2>
-          <TableData
-        
+      <TableData
         columns={columns}
         openModal={open}
         data={editData}

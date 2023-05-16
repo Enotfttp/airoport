@@ -138,7 +138,7 @@ const Flights: React.FC = () => {
     [dataAirlines, dataStatuses, dataEnters, dataAircrafts, dataEmployees]
   );
 
-    const handleAdd = React.useCallback(async (data: any) => {
+  const handleAdd = React.useCallback(async (data: any) => {
     const dataTable = await addFlight({
       departure: dateForAnswerToBackend(data.departure),
       arrival: dateForAnswerToBackend(data.arrival),
@@ -153,21 +153,25 @@ const Flights: React.FC = () => {
     setData(dataTable);
   }, []);
 
-  const handleEdit = React.useCallback((data: any) => {
-    editFlight({
-      idFlight: data.id,
-      departure: dateForAnswerToBackend(data.departure),
-      arrival: dateForAnswerToBackend(data.arrival),
-      departureCiry: data.departureCiry,
-      arrivalCiry: data.arrivalCiry,
-      idEnter: checkIsArrayDataFromModal(data.enterSelect),
-      idPilot: checkIsArrayDataFromModal(data.fioSelect),
-      idStatus: checkIsArrayDataFromModal(data.statusSelect),
-      idAirline: checkIsArrayDataFromModal(data.nameCompanySelect),
-      idPlane: checkIsArrayDataFromModal(data.planeSelect),
-    });
-    setOpen(false);
-  }, []);
+  const handleEdit = React.useCallback(
+    (data: any) => {
+      editFlight({
+        idFlight: data.id,
+        departure: dateForAnswerToBackend(data.departure),
+        arrival: dateForAnswerToBackend(data.arrival),
+        departureCiry: data.departureCiry,
+        arrivalCiry: data.arrivalCiry,
+        idEnter: checkIsArrayDataFromModal(data.enterSelect),
+        idPilot: checkIsArrayDataFromModal(data.fioSelect),
+        idStatus: checkIsArrayDataFromModal(data.statusSelect),
+        idAirline: checkIsArrayDataFromModal(data.nameCompanySelect),
+        idPlane: checkIsArrayDataFromModal(data.planeSelect),
+      });
+      setOpen(false);
+      fetchData();
+    },
+    [fetchData]
+  );
 
   const handleDelete = React.useCallback(async () => {
     if (id) {
